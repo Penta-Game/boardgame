@@ -1,83 +1,86 @@
 {
-  "name": "boardgame",
-  "version": "1.0.0",
-  "description": "boardgame.io implementation of pentagame",
-  "productName": "boardgame",
-  "main": "dist/index.js",
-  "scripts": {
-    "start": "tsc && electron-forge start",
-    "package": "electron-forge package",
-    "make": "electron-forge make",
-    "publish": "electron-forge publish",
-    "lint": "eslint --ext .ts ."
-  },
-  "keywords": [
-    "boardgame.io",
-    "pentagame"
-  ],
-  "author": {
-    "name": "Cobalt",
-    "email": "Chaosthe0rie@protonmail.com"
-  },
-  "license": "MIT",
-  "config": {
-    "forge": {
-      "packagerConfig": {},
-      "makers": [
-        {
-          "name": "@electron-forge/maker-squirrel",
-          "config": {
-            "name": "_boardgame"
-          }
-        },
-        {
-          "name": "@electron-forge/maker-zip",
-          "platforms": [
-            "darwin"
-          ]
-        },
-        {
-          "name": "@electron-forge/maker-deb",
-          "config": {}
-        },
-        {
-          "name": "@electron-forge/maker-rpm",
-          "config": {}
+    "name": "boardgame",
+    "version": "1.0.0",
+    "description": "boardgame.io implementation of pentagame",
+    "productName": "boardgame",
+    "main": "dist/index.js",
+    "scripts": {
+        "start": "tsc && electron-forge start",
+        "clean": "rm -rf out dist",
+        "clean-start": "rm -rf out dist && tsc && electron-forge start",
+        "package": "electron-forge package",
+        "make": "electron-forge make",
+        "publish": "electron-forge publish",
+        "lint": "eslint --ext .ts .",
+        "rebuild-linux": "./node_modules/.bin/electron-rebuild",
+        "rebuild-windows": ".\\node_modules\\.bin\\electron-rebuild.cmd"
+    },
+    "keywords": [
+        "boardgame.io",
+        "pentagame"
+    ],
+    "author": {
+        "name": "Cobalt",
+        "email": "Chaosthe0rie@protonmail.com"
+    },
+    "license": "MIT",
+    "config": {
+        "forge": {
+            "packagerConfig": {},
+            "makers": [{
+                    "name": "@electron-forge/maker-squirrel",
+                    "config": {
+                        "name": "_boardgame"
+                    }
+                },
+                {
+                    "name": "@electron-forge/maker-zip",
+                    "platforms": [
+                        "darwin"
+                    ]
+                },
+                {
+                    "name": "@electron-forge/maker-deb",
+                    "config": {}
+                },
+                {
+                    "name": "@electron-forge/maker-rpm",
+                    "config": {}
+                }
+            ]
         }
-      ]
-    }
-  },
-  "devDependencies": {
-    "@electron-forge/cli": "^6.0.0-beta.50",
-    "@electron-forge/maker-deb": "^6.0.0-beta.50",
-    "@electron-forge/maker-rpm": "^6.0.0-beta.50",
-    "@electron-forge/maker-squirrel": "^6.0.0-beta.50",
-    "@electron-forge/maker-zip": "^6.0.0-beta.50",
-    "@types/node": "^12.12.34",
-    "@typescript-eslint/eslint-plugin": "^2.26.0",
-    "@typescript-eslint/parser": "^2.26.0",
-    "electron": "8.2.0",
-    "eslint": "^6.8.0",
-    "eslint-plugin-import": "^2.20.2",
-    "typescript": "^3.8.3"
-  },
-  "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.13.0",
-    "electron-forge-maker-appimage": "^22.6.0",
-    "electron-is-dev": "^1.2.0",
-    "electron-squirrel-startup": "^1.0.0",
-    "jquery": ">=3.5.0",
-    "node": "^14.0.0",
-    "node-gyp": "^6.1.0",
-    "tsc": "^1.20150623.0",
-    "types": "^0.1.1"
-  },
-  "bugs": {
-    "url": "https://github.com/Penta-Game/boardgame/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Penta-Game/boardgame.git"
-  },
-  "homepage": "https://github.com/Penta-Game/boardgame#readme"
+    },
+    "devDependencies": {
+        "@electron-forge/cli": "^6.0.0-beta.50",
+        "@electron-forge/maker-deb": "^6.0.0-beta.50",
+        "@electron-forge/maker-rpm": "^6.0.0-beta.50",
+        "@electron-forge/maker-squirrel": "^6.0.0-beta.50",
+        "@electron-forge/maker-zip": "^6.0.0-beta.50",
+        "@types/node": "^12.12.34",
+        "@typescript-eslint/eslint-plugin": "^2.26.0",
+        "@typescript-eslint/parser": "^2.26.0",
+        "electron": "8.2.0",
+        "eslint": "^6.8.0",
+        "eslint-plugin-import": "^2.20.2",
+        "typescript": "^3.8.3"
+    },
+    "dependencies": {
+        "@fortawesome/fontawesome-free": "^5.13.0",
+        "electron-forge-maker-appimage": "^22.6.0",
+        "electron-is-dev": "^1.2.0",
+        "electron-squirrel-startup": "^1.0.0",
+        "jquery": ">=3.5.0",
+        "node": "^14.0.0",
+        "node-gyp": "^6.1.0",
+        "tsc": "^1.20150623.0",
+        "types": "^0.1.1"
+    },
+    "bugs": {
+        "url": "https://github.com/Penta-Game/boardgame/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Penta-Game/boardgame.git"
+    },
+    "homepage": "https://github.com/Penta-Game/boardgame#readme"
 }
