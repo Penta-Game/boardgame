@@ -34,8 +34,28 @@
 
 <body>
     <div class="full">
-        <div id="board-container" class="m-0 p-0 w-100 h-100"></div>
+        <div id="board-container" class="container w-100 h-100"></div>
     </div>
+    <button class="float btn btn-elegant" id="change-size">Change Size</button>
 </body>
+
+<!-- Modal -->
+<div class="modal fade" id="sizeModal" tabindex="-1" role="dialog" aria-labelledby="sizeModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="sizeModalLabel">Change size</h5>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="number" id="size-input" max="1000" min="1" class="form-control">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="sizeModal-close">Close</button>
+                <button type="button" class="btn btn-primary" id="sizeModal-change">Change Size</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 </html>

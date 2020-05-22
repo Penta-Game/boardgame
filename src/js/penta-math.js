@@ -1,35 +1,78 @@
 const PentaMath = function() {
-    var calc = (draw, selector) => {
-        const golden = (Math.sqrt(5) + 1) / 2;
-        const l = 6;
-        const k = 3;
+    /*
+    This class provides an appropiate representation of the sizes and values for the construction of a pentagame board.
+    The logic was supplied by @penta-jan <https://github.com/penta-jan>.
+    The implementation was written by @cobalt <https://sinclair.gq>
 
-        console.log(draw.find(".bg-circle").width());
+    To learn more about pentagame visit https://pentagame.org
+    */
 
-        var height = draw.find(".bg-circle").height(),
-            width = draw.find(".bg-circle").width()[0],
-            radius = width / 2,
-            Base = { y: 0, x: 500 },
-            c = [],
-            step = 2 * Math.PI / 5,
-            shift = (Math.PI / 180.0) * -18;
+    // holds the relative numerical relativ values based on s
+    var _sizes = {
+        s: 1, // stop on star
+        c: Math.sqrt(5), // corner stop
+        j: (9 - 2 * Math.sqrt(5)) / Math.sqrt(5), // junction stop
+        r: (2 / 5) * Math.sqrt(1570 + 698 * Math.sqrt(5)), // pentagram (diameter)
+    };
+    _sizes.R = _sizes.r + Math.sqrt(5); // entire board
+    const constants = {
+        l: 6,
+        k: 3,
+        golden: (Math.sqrt(5) + 1) / 2,
+        sizes: _sizes
+    };
 
+    var helper = (angle, radius) => {
+        // shortcut for trigonometric angle based x and y calculation
+        var x = radius * Math.sin(angle);
+        var y = radius - radius * Math.cos(angle);
+        return [x, y];
+    }
+
+    var calc = (s) => {
+        // calculate the board based on s and with values from constants.sizes
+        var board = {};
+
+        for (let [key, value] of Object.entries(constants.sizes)) {
+            board[key] = value * s;
+            console.log(s)
+        }
+
+        return board;
+    };
+
+    var draw = (drawer, R) => {
+        const s = R / constants.sizes.R;
+        console.log(drawer.height());
+        const diameters = calc(s);
+        var board = {
+            diameters: diameters,
+            corners: [],
+            junctions: []
+        };
+        console.log(diameters);
+
+        var Base = { y: 0, x: R / 2 };
+
+        // drawing corners
         for (var i = 1; i <= 5; ++i) {
             var th = i * 4 * Math.PI / 5;
-            var x = Base.x + radius * Math.sin(th);
-            var y = Base.y + radius - radius * Math.cos(th);
-            var circ = draw.circle(100);
+            var points = helper(th, Base.x)
+            var x = Base.x + points[0];
+            var y = Base.y + points[1];
+            console.log(points);
+            var circ = drawer.circle(diameters.c);
             circ.attr({ fill: "gray" });
             circ.center(x, y);
             circ.data({ id: i });
-            c.push([x, y]);
+            board.corners.push({ id: i, x: x, y: y })
         }
-
-        console.log(c);
 
     };
     return {
-        calc: calc
+        draw: draw,
+        calc: calc,
+        constants: constants
     };
 }();
 
