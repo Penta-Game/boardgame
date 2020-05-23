@@ -67,6 +67,7 @@
     },
     "dependencies": {
         "@fortawesome/fontawesome-free": "^5.13.0",
+        "boardgame.io": "^0.39.11",
         "electron-forge-maker-appimage": "^22.6.0",
         "electron-is-dev": "^1.2.0",
         "electron-squirrel-startup": "^1.0.0",

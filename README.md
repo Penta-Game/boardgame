@@ -8,7 +8,7 @@ The file `src/js/penta-math.js` represents a pentagame board correctly and can c
 
 ## Installation
 
-A working npm installation (>=6.14.4) is required.
+A working npm installation (>=6.14.5) is required.
 
 To install all dependencies run:
 
