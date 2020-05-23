@@ -6,6 +6,18 @@ boardgame.io implementation for pentagame. The implementation will include an el
 
 The file `src/js/penta-math.js` represents a pentagame board correctly and can compute the sizes etc.
 
+## Installation
+
+A working npm installation (>=6.14.4) is required.
+
+To install all dependencies run:
+
+`npm install`
+
+To run the app:
+
+`npm run`
+
 ## Roadmap
 
 ### 0.2 release
@@ -16,4 +28,4 @@ The file `src/js/penta-math.js` represents a pentagame board correctly and can c
 ### 0.1 release
 
 - [ ] penatagame board logic (math)
-- [ ] boardgame.io implmentation (client)
+- [ ] boardgame.io implementation (client)
