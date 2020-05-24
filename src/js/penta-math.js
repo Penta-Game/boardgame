@@ -25,8 +25,8 @@ const PentaMath = function() {
 
     _sizes.R = _sizes.r + Math.sqrt(5); // entire board
     _sizes.id = _sizes.r - Math.sqrt(Math.pow((_sizes.r / Math.pow(_constants.golden, 2)), 2) - Math.pow(((_sizes.r / Math.pow(_constants.golden, 3)) / 2), 2)); // diameter of circle inside junctions
-    _sizes.ir = _sizes.id / 2;
-    _sizes.or = 1; // radius of circle containing junctions
+    _sizes.i_r = _sizes.i_d / 2;
+    _sizes.p = 1; // radius of circle containing junctions
     _constants.sizes = _sizes;
     const constants = _constants;
 
@@ -100,12 +100,13 @@ const PentaMath = function() {
         }
 
         // drawing outer arms
+        // calculations are done by spliting the circle into sectors and taking the exisitng corners as base points
         console.log(board.corners);
         for (var i = 0; i < board.corners.length; i++) {
             console.log("start");
             var corner = board.corners[i];
             var next = board.corners[corner.next];
-            var spacing = (72 / (constants.k + 1)) / 60; // spacing with viewbox mod
+            var spacing = (72 / (constants.k + 1)) / (constants.k * 20); // spacing with viewbox mod
             console.log(spacing);
             for (var z = 1; z <= constants.k; z++) {
                 var angle = corner.angle + spacing * z;
