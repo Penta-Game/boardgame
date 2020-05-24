@@ -16,6 +16,10 @@ To install all dependencies run:
 
 To run the app:
 
+`npm start`
+
+To get a list of available commands:
+
 `npm run`
 
 ## Roadmap

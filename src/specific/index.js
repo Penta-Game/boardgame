@@ -27,7 +27,6 @@ $(document).ready(() => {
 });
 
 function drawBoard(draw, size) {
-    console.log(draw);
     $(draw.node).empty();
     var circ = draw.circle(size);
     circ.attr({ fill: "black" });

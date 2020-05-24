@@ -3,15 +3,15 @@
     "version": "1.0.0",
     "description": "boardgame.io implementation of pentagame",
     "productName": "boardgame",
-    "main": "dist/index.js",
+    "main": "src/main.js",
     "scripts": {
-        "start": "tsc && electron-forge start",
-        "clean": "rm -rf out dist",
-        "clean-start": "rm -rf out dist && tsc && electron-forge start",
+        "start": "electron-forge start",
+        "clean": "rm -rf out",
+        "clean-start": "rm -rf out && electron-forge start",
         "package": "electron-forge package",
         "make": "electron-forge make",
         "publish": "electron-forge publish",
-        "lint": "eslint --ext .ts .",
+        "lint": "eslint --ext .",
         "rebuild-linux": "./node_modules/.bin/electron-rebuild",
         "rebuild-windows": ".\\node_modules\\.bin\\electron-rebuild.cmd"
     },
@@ -27,8 +27,7 @@
     "config": {
         "forge": {
             "packagerConfig": {},
-            "makers": [
-                {
+            "makers": [{
                     "name": "@electron-forge/maker-squirrel",
                     "config": {
                         "name": "_boardgame"
@@ -67,6 +66,7 @@
     },
     "dependencies": {
         "@fortawesome/fontawesome-free": "^5.13.0",
+        "@types/koa": "^2.11.3",
         "boardgame.io": "^0.39.11",
         "electron-forge-maker-appimage": "^22.6.0",
         "electron-is-dev": "^1.2.0",
@@ -74,6 +74,7 @@
         "jquery": ">=3.5.0",
         "node": "^14.0.0",
         "node-gyp": "^6.1.0",
+        "react": "^16.13.1",
         "svgjs": "^2.6.2",
         "tsc": "^1.20150623.0",
         "types": "^0.1.1"
