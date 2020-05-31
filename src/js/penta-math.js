@@ -49,14 +49,6 @@ const PentaMath = function() {
         return board;
     };
 
-    var reverseArr = (input) => {
-        var ret = new Array;
-        for (var i = input.length - 1; i >= 0; i--) {
-            ret.push(input[i]);
-        }
-        return ret;
-    }
-
     var draw = (drawer, R, args) => {
         const _diameters = calc(R / constants.sizes.R);
         console.debug(`diameters: ${_diameters}`);
@@ -74,11 +66,6 @@ const PentaMath = function() {
         // center.x is also the radius of the pentagramm
 
         // drawing corners and junctions
-        // next corner clockwise
-        var _next = [
-            3, 4, 0, 1, 2
-        ];
-
         if (args === undefined || args.colors === undefined) {
             var colors = [
                 "blue",
@@ -87,10 +74,8 @@ const PentaMath = function() {
                 "yellow",
                 "white"
             ];
-            var rcolors = reverseArr(colors);
         } else {
             var colors = args.colors;
-            var rcolors = reverseArr(colors);
         }
 
         for (var i = 0; i < 5; i++) {
@@ -99,56 +84,56 @@ const PentaMath = function() {
             var cpoints = helper(center.x, center.y, center.x, cangle);
             var jpoints = helper(center.x, center.y, jradius, cangle + 180);
             var corner = drawer.circle(board.diameters.c);
-            corner.attr({ fill: "gray", stroke: colors[i - 1], "stroke-width": 3 });
+            corner.attr({ fill: "gray", stroke: colors[i], "stroke-width": 3 });
             corner.center(cpoints.x, cpoints.y);
-            corner.data({ id: i });
+            corner.data({ id: i + 7 });
             var junction = drawer.circle(board.diameters.j);
-            junction.attr({ fill: "gray", stroke: colors[i - 1], "stroke-width": 3 });
+            junction.attr({ fill: "gray", stroke: colors[i], "stroke-width": 3 });
             junction.center(jpoints.x, jpoints.y);
-            junction.data({ id: i });
+            junction.data({ id: i + 1 });
             board.corners[i] = {
+                id: i + 7,
                 x: cpoints.x,
                 y: cpoints.y,
-                next: _next[i],
+                next: i + 8,
                 angle: cangle,
-                color: colors[i - 1]
+                color: colors[i]
             };
             board.junctions[i] = {
+                id: i + 1,
                 x: jpoints.x,
                 y: jpoints.y,
-                next: _next[i],
+                next: i + 2,
                 angle: cangle + 180,
-                color: colors[i - 1]
+                color: colors[i]
             };
         }
 
-        // drawing outer arms
-        // calculations are done by spliting the circle into sectors and taking the exisitng corners as center points
-        console.log(board.corners);
-        for (var i = 0; i < board.corners.length; i++) {
-            console.log("start");
+        // drawing outer stops
+        for (var i = 0; i < Object.keys(board.corners).length; i++) {
             var corner = board.corners[i];
-            var spacing = ((constants.k * 4) / (constants.k + 1)); // spacing with viewbox mod
-            console.log(spacing);
-            for (var z = 1; z <= constants.k; z++) {
-                var angle = corner.angle + spacing * z;
-                if (angle >= 360) {
-                    angle -= 360;
-                } else if (angle <= 0) {
-                    angle += 360;
-                }
-                console.log(angle);
-                var points = helper(angle, center.x)
-                var x = center.x + points[0];
-                var y = center.y + points[1];
+            for (var z = 1; z <= 4; z++) {
+                var angle = corner.angle + constants.theta * z;
+                var points = helper(center.x, center.y, center.x, angle)
                 var circ = drawer.circle(board.diameters.s);
                 circ.attr({ fill: "gray" });
-                circ.center(x, y);
+                circ.center(points.x, points.y);
                 circ.data({ id: `s-${i}-${z}` });
-                board.stops.outer.push({ id: `s-${i}-${z}`, x: x, y: y, angle: angle });
+                board.stops.outer[`s-${i}-${z}`] = {
+                    x: points.x,
+                    y: points.y,
+                    angle: angle
+                };
             }
-            console.log("end");
         }
+
+        // drawing legs (WIP)
+        /*
+        for (var i = 0; i > Object.keys(board.juntions).lenght; i++) {
+            var juntion = board.juntions[i];
+            for     
+        }
+        */
 
         return {
             board: board
