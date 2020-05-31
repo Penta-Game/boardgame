@@ -11,34 +11,33 @@ const PentaMath = function() {
     var _constants = {
         l: 6, // legs
         k: 3, // arms
+        p: Math.sqrt((25 - 11 * Math.sqrt(5)) / (5 - Math.sqrt(5))), // inner 
         golden: (Math.sqrt(5) + 1) / 2, // golden section value
         theta: 18 // theta value
     };
 
-    // holds the relative numerical relativ values based on s
+    // holds the relative numerical relativ values centerd on s
     var _sizes = {
         s: 1, // stop on star
         c: Math.sqrt(5), // corner stop
         j: (9 - 2 * Math.sqrt(5)) / Math.sqrt(5), // junction stop
-        r: (2 / 5) * Math.sqrt(1570 + 698 * Math.sqrt(5)), // pentagram (diameter)
+        r: (2 / 5) * Math.sqrt(1570 + 698 * Math.sqrt(5)) // pentagram (diameter)
     };
 
     _sizes.R = _sizes.r + Math.sqrt(5); // entire board
-    _sizes.id = _sizes.r - Math.sqrt(Math.pow((_sizes.r / Math.pow(_constants.golden, 2)), 2) - Math.pow(((_sizes.r / Math.pow(_constants.golden, 3)) / 2), 2)); // diameter of circle inside junctions
-    _sizes.i_r = _sizes.i_d / 2;
-    _sizes.p = 1; // radius of circle containing junctions
     _constants.sizes = _sizes;
     const constants = _constants;
 
-    var helper = (angle, radius) => {
-        // shortcut for trigonometric angle based x and y calculation
-        var x = radius * Math.sin(angle);
-        var y = radius - radius * Math.cos(angle);
-        return [x, y];
-    }
+    var helper = (centerX, centerY, radius, angle) => {
+        angle = angle * Math.PI / 180;
+        return {
+            x: centerX + (radius * Math.cos(angle)),
+            y: centerY + (radius * Math.sin(angle))
+        };
+    };
 
     var calc = (s) => {
-        // calculate the board based on s and with values from constants.sizes
+        // calculate the board's diamteres centerd on 
         var board = {};
 
         for (let [key, value] of Object.entries(constants.sizes)) {
@@ -50,63 +49,86 @@ const PentaMath = function() {
         return board;
     };
 
-    var draw = (drawer, R) => {
-        const s = R / constants.sizes.R;
-        const diameters = calc(s);
-        console.log(diameters);
+    var reverseArr = (input) => {
+        var ret = new Array;
+        for (var i = input.length - 1; i >= 0; i--) {
+            ret.push(input[i]);
+        }
+        return ret;
+    }
+
+    var draw = (drawer, R, args) => {
+        const _diameters = calc(R / constants.sizes.R);
+        console.debug(`diameters: ${_diameters}`);
         var board = {
-            diameters: diameters,
-            corners: [],
-            junctions: [],
+            diameters: _diameters,
+            corners: {},
+            junctions: {},
             stops: {
-                outer: [],
-                inner: []
+                outer: {},
+                inner: {}
             }
         };
 
-        var Base = { y: 0, x: R / 2 }; // highest point of circle
-        // base.x is also the radius of the pentagramm
+        var center = { y: board.diameters.R / 2, x: board.diameters.R / 2 }; // highest point of circle
+        // center.x is also the radius of the pentagramm
 
-        // drawing corners
+        // drawing corners and junctions
+        // next corner clockwise
         var _next = [
             3, 4, 0, 1, 2
         ];
 
-        var colors = [
-            "blue",
-            "red",
-            "green",
-            "yellow",
-            "white"
-        ];
+        if (args === undefined || args.colors === undefined) {
+            var colors = [
+                "blue",
+                "red",
+                "green",
+                "yellow",
+                "white"
+            ];
+            var rcolors = reverseArr(colors);
+        } else {
+            var colors = args.colors;
+            var rcolors = reverseArr(colors);
+        }
 
-        for (var i = 1; i <= 5; ++i) {
-            var th = i * 4 * Math.PI / 5;
-            var points = helper(th, Base.x)
-            var x = Base.x + points[0];
-            var y = Base.y + points[1];
-            var circ = drawer.circle(diameters.c);
-            circ.attr({ fill: "gray", stroke: colors[i - 1], "stroke-width": 3 });
-            circ.center(x, y);
-            circ.data({ id: i });
-            board.corners.push({
-                id: i,
-                x: x,
-                y: y,
+        for (var i = 0; i < 5; i++) {
+            var cangle = i * (constants.theta * 4);
+            var jradius = constants.p * center.x;
+            var cpoints = helper(center.x, center.y, center.x, cangle);
+            var jpoints = helper(center.x, center.y, jradius, cangle + 180);
+            var corner = drawer.circle(board.diameters.c);
+            corner.attr({ fill: "gray", stroke: colors[i - 1], "stroke-width": 3 });
+            corner.center(cpoints.x, cpoints.y);
+            corner.data({ id: i });
+            var junction = drawer.circle(board.diameters.j);
+            junction.attr({ fill: "gray", stroke: colors[i - 1], "stroke-width": 3 });
+            junction.center(jpoints.x, jpoints.y);
+            junction.data({ id: i });
+            board.corners[i] = {
+                x: cpoints.x,
+                y: cpoints.y,
                 next: _next[i],
-                angle: th,
+                angle: cangle,
                 color: colors[i - 1]
-            });
+            };
+            board.junctions[i] = {
+                x: jpoints.x,
+                y: jpoints.y,
+                next: _next[i],
+                angle: cangle + 180,
+                color: colors[i - 1]
+            };
         }
 
         // drawing outer arms
-        // calculations are done by spliting the circle into sectors and taking the exisitng corners as base points
+        // calculations are done by spliting the circle into sectors and taking the exisitng corners as center points
         console.log(board.corners);
         for (var i = 0; i < board.corners.length; i++) {
             console.log("start");
             var corner = board.corners[i];
-            var next = board.corners[corner.next];
-            var spacing = (72 / (constants.k + 1)) / (constants.k * 20); // spacing with viewbox mod
+            var spacing = ((constants.k * 4) / (constants.k + 1)); // spacing with viewbox mod
             console.log(spacing);
             for (var z = 1; z <= constants.k; z++) {
                 var angle = corner.angle + spacing * z;
@@ -116,10 +138,10 @@ const PentaMath = function() {
                     angle += 360;
                 }
                 console.log(angle);
-                var points = helper(angle, Base.x)
-                var x = Base.x + points[0];
-                var y = Base.y + points[1];
-                var circ = drawer.circle(diameters.s);
+                var points = helper(angle, center.x)
+                var x = center.x + points[0];
+                var y = center.y + points[1];
+                var circ = drawer.circle(board.diameters.s);
                 circ.attr({ fill: "gray" });
                 circ.center(x, y);
                 circ.data({ id: `s-${i}-${z}` });
@@ -128,28 +150,14 @@ const PentaMath = function() {
             console.log("end");
         }
 
-        // drawing junctions
-        /*
-        Base = { y: R / 4, x: diameters.or  };
-
-        for (var i = 1; i <= 5; ++i) {
-            var th = i * 2 * Math.PI / 5;
-            var points = helper(th, diameters.ir)
-            var x = Base.x + points[0];
-            var y = Base.y + points[1];
-            var circ = drawer.circle(diameters.j);
-            circ.attr({ fill: "gray" });
-            circ.center(x, y);
-            circ.data({ id: i });
-            board.corners.push({ id: i, x: x, y: y })
-        }
-        */
-
-        // drawing outer
+        return {
+            board: board
+        };
     };
     return {
         draw: draw,
         calc: calc,
+        helper: helper,
         constants: constants
     };
 }();

@@ -1,3 +1,5 @@
+const { ipcRenderer } = require("electron");
+
 $(document).ready(() => {
     const parent = $("#board-container");
     var draw = SVG().addTo("#board-container");
@@ -32,5 +34,8 @@ function drawBoard(draw, size) {
     circ.attr({ fill: "black" });
     circ.data({ "id": "bg" });
     circ.addClass("bg-circle");
-    PentaMath.draw(draw, size);
+    var game = PentaMath.draw(draw, size);
+    ipcRenderer.send("drawn", {
+        board: game.board
+    });
 }

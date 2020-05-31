@@ -1,11 +1,16 @@
 const { Client } = require('boardgame.io');
-const { app, BrowserWindow } = require('electron');
+const { ipcMain, app, BrowserWindow } = require('electron');
 const path = require('path');
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
     app.quit();
 }
+
+var global = {
+    board: null,
+    app: null
+};
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
@@ -52,14 +57,14 @@ app.on('activate', () => {
     }
 });
 
-const TicTacToe = {
-    setup: () => ({ cells: Array(9).fill(null) }),
-
-    moves: {
-        clickCell: (G, ctx, id) => {
-            G.cells[id] = ctx.currentPlayer;
-        },
-    },
-};
-
-const App = Client({ game: TicTacToe });
+ipcMain.on("drawn", (evt, data) => {
+    global.game = {
+        setup: () => ({ board: data.board }),
+        moves: {
+            clickCell: (G, ctx, id) => {
+                G.cells[id] = ctx.currentPlayer;
+            }
+        }
+    };
+    global.App = Client({ game: global.game });
+});
