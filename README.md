@@ -31,5 +31,5 @@ To get a list of available commands:
 
 ### 0.1 release
 
-- [ ] penatagame board logic (math)
+- [ ] penatagame board logic (math) (being rebuild at the moment)
 - [ ] boardgame.io implementation (client)
