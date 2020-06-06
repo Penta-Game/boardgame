@@ -1,6 +1,7 @@
 'use strict';
 
 const { remote, shell } = require("electron");
+require('module-alias/register');
 if (typeof $ !== 'undefined') {
     const $ = require('jquery'); // jquery support if not loaded before
 }

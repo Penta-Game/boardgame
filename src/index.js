@@ -1,16 +1,5 @@
-const { Client } = require('boardgame.io');
-const { ipcMain, app, BrowserWindow } = require('electron');
-const path = require('path');
-
-// Handle creating/removing shortcuts on Windows when installing/uninstalling.
-if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
-    app.quit();
-}
-
-var global = {
-    board: null,
-    app: null
-};
+import { app, BrowserWindow } from 'electron';
+import * as path from 'path';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
@@ -24,7 +13,9 @@ const createWindow = () => {
         width: 800,
         webPreferences: {
             nodeIntegration: true,
-            spellcheck: true
+            spellcheck: true,
+            fullscreen: true,
+            enableRemoteModule: true
         }
     });
 
@@ -57,14 +48,9 @@ app.on('activate', () => {
     }
 });
 
-ipcMain.on("drawn", (evt, data) => {
-    global.game = {
-        setup: () => ({ board: data.board }),
-        moves: {
-            clickCell: (G, ctx, id) => {
-                G.cells[id] = ctx.currentPlayer;
-            }
-        }
-    };
-    global.App = Client({ game: global.game });
+// In this file you can include the rest of your app's specific main process
+// code. You can also put them in separate files and import them here.
+
+app.on("drawn", (evt, data) => {
+    console.log(data);
 });

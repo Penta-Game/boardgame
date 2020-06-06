@@ -1,33 +1,18 @@
-class Corner {
-    // class representing a corner of a pentagame board
-    constructor(data) {
-        this.angle = data.angle;
-        this.id = data.id;
-        this.points = { x: data.x, y: data.y };
-        this.next = data.next;
-        this.color = data.color;
-        this.node = data.node;
-    }
+if (typeof variable === 'undefined') {
 
-    getAdjacent(board) {
-        return {
-            corners: [board.corners[this.id - 1], board.corners[this.id + 1]],
-            juntions: [board.juntions[this.id - 6], board.juntions[this.id - 5]]
-        }
-    }
+    const core = require(`@local/core`);
 }
-
 
 const PentaMath = function() {
     /*
-    This class provides an appropiate representation of the sizes and values for the construction of a pentagame board.
+    This class provides an appropriate representation of the sizes and values for the construction of a pentagame board.
     The basic logic was supplied by @penta-jan <https://github.com/penta-jan>.
     The implementation was written by @cobalt <https://sinclair.gq>
 
     To learn more about pentagame visit https://pentagame.org
     */
 
-    // holds the numerical constant
+    // holds the numerical constants
     var _constants = {
         l: 6, // legs
         k: 3, // arms
@@ -45,6 +30,7 @@ const PentaMath = function() {
     };
 
     _sizes.R = _sizes.r + Math.sqrt(5); // entire board
+    _sizes.outer_circle = _sizes.r / _sizes.R * 0.2 // background stroke width
     _constants.sizes = _sizes;
     const constants = _constants;
 
@@ -83,7 +69,12 @@ const PentaMath = function() {
         };
 
         var center = { y: board.diameters.R / 2, x: board.diameters.R / 2 }; // highest point of circle
-        // center.x is also the radius of the pentagramm
+
+        // draw outer circle
+        var circ = drawer.circle(board.diameters.R);
+        circ.attr({ fill: "none", stroke: "grey", "stroke-width": board.diameters.outer_circle });
+        circ.data({ "id": "outer-circle" });
+
 
         // drawing corners and junctions
         if (args === undefined || args.colors === undefined) {
@@ -111,7 +102,7 @@ const PentaMath = function() {
             junction.attr({ fill: "gray", stroke: colors[i], "stroke-width": 3 });
             junction.center(jpoints.x, jpoints.y);
             junction.data({ id: i + 1 });
-            board.corners[i] = new Corner({
+            board.corners[i] = new core.Point({
                 id: i + 7,
                 x: cpoints.x,
                 y: cpoints.y,
@@ -120,7 +111,7 @@ const PentaMath = function() {
                 angle: cangle,
                 color: colors[i]
             });
-            board.junctions[i] = {
+            board.junctions[i] = new core.Point({
                 id: i + 1,
                 x: jpoints.x,
                 y: jpoints.y,
@@ -128,13 +119,12 @@ const PentaMath = function() {
                 node: junction.node,
                 angle: cangle + 180,
                 color: colors[i]
-            };
+            });
         }
 
         // drawing stops
         for (var i = 0; i < Object.keys(board.corners).length; i++) {
             var corner = board.corners[i];
-            console.log(corner);
 
             // drawing outer stops
             for (var z = 1; z <= 3; z++) {
@@ -152,24 +142,44 @@ const PentaMath = function() {
             }
 
             // drawing legs
-            var _radius = board.diameters.r / Math.pow(constants.golden, 2);
+            var _radius = (board.diameters.r / Math.pow(constants.golden, 2)) - (board.diameters.j * 2) / 6;
             console.log(_radius);
             var angles = [constants.theta, constants.theta * -1];
             for (var z = 0; z < 2; z++) {
                 var angle = corner.angle + angles[z] + 180;
-                for (var u = 1; u <= 3; u++) {
-                    var radius = _radius / 4 * u;
+                for (var u = 1; u <= 6; u++) {
+                    var radius = _radius - (board.diameters.s) * u;
                     var points = helper(corner.points.x, corner.points.y, radius, angle);
                     var circ = drawer.circle(board.diameters.s);
                     circ.attr({ fill: "gray" });
                     circ.center(points.x, points.y);
-                    circ.data({ id: `s-${i}-${u}-${i+5+z}` });
+                    circ.data({ id: `s-${corner.id}-${u}-${corner.id-4}` });
                     board.stops.inner[`s-${i}-${u}-${i+5+z}`] = {
                         x: points.x,
                         y: points.y,
                         angle: angle
                     };
                 }
+            }
+        }
+
+        // drawing arms
+        for (var i = 0; i < Object.keys(board.junctions).length; i++) {
+            var junction = board.junctions[i];
+            var _radius = (board.diameters.r / Math.pow(constants.golden, 3));
+            var angle = junction.angle + constants.theta * 7;
+            for (var z = 1; z <= 3; z++) {
+                var radius = _radius - (board.diameters.s) * z;
+                var points = helper(junction.points.x, junction.points.y, radius, angle);
+                var circ = drawer.circle(board.diameters.s);
+                circ.attr({ fill: "red" });
+                circ.center(points.x, points.y);
+                circ.data({ id: `s-${junction.id}-${u}-${junction.id+1}` });
+                board.stops.inner[`s-${i}-${u}-${i+5+z}`] = {
+                    x: points.x,
+                    y: points.y,
+                    angle: angle
+                };
             }
         }
 
@@ -187,4 +197,4 @@ const PentaMath = function() {
     };
 }();
 
-module.exports = PentaMath;
+module.export = PentaMath;
