@@ -6,6 +6,7 @@
     "main": "dist/index.js",
     "scripts": {
         "start": "tsc && electron-forge start",
+        "watch": "tsc-watch --onFailure 'echo Beep!Compilation Failed'",
         "package": "electron-forge package",
         "make": "electron-forge make",
         "publish": "electron-forge publish",
@@ -22,11 +23,11 @@
         "email": "Chaosthe0rie@protonmail.com"
     },
     "license": "MIT",
-
     "config": {
         "forge": {
             "packagerConfig": {},
-            "makers": [{
+            "makers": [
+                {
                     "name": "@electron-forge/maker-squirrel",
                     "config": {
                         "name": "_boardgame"
@@ -69,7 +70,6 @@
         "boardgame.io": "^0.39.12",
         "electron-squirrel-startup": "^1.0.0",
         "jquery": "^3.5.1",
-        "mdbreact": "^4.27.0",
         "module-alias": "^2.2.2",
         "node": "^14.4.0"
     },
