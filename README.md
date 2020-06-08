@@ -1,10 +1,10 @@
 # boardgame
 
-boardgame.io implementation for pentagame. The implementation will include an electron based client.
+electron powered implementation of pentagame. Powered by https://github.com/Penta-Game/boardgame
 
 ## Pentagame notes
 
-The file `src/js/penta-math.js` represents a pentagame board correctly and can compute the sizes etc.
+The file `src/js/penta-math.js` represents a pentagame board and can compute the sizes etc.
 
 ## Installation
 
