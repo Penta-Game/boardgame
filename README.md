@@ -22,6 +22,10 @@ To get a list of available commands:
 
 `npm run`
 
+## Development Notes
+
+It's recommended to use `tsc-watcher` while working on files in `src`. Otherwise the running instance will only be able to acces the files (JS) in the `dist` folder. To use it execute `npm run-script watch`.
+
 ## Roadmap
 
 ### 0.2 release
