@@ -1,6 +1,8 @@
+![Electron Version](https://img.shields.io/badge/electron-9.0.2-blue?style=for-the-badge&logo=electron)
+
 # boardgame
 
-electron powered implementation of pentagame. Powered by https://github.com/Penta-Game/boardgame
+electron powered implementation of pentagame. Powered by https://github.com/Penta-Game/boardgame-backend
 
 ## Pentagame notes
 
