@@ -1,3 +1,5 @@
+> Migrated to [gitlab.cobalt.rocks](https://gitlab.cobalt.rocks/cobalt/boardgame)
+
 ![Electron Version](https://img.shields.io/badge/electron-9.0.2-blue?style=for-the-badge&logo=electron)
 
 # boardgame
